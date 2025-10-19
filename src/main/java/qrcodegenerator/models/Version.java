@@ -54,10 +54,14 @@ public enum Version {
     private final int maxBinaryChars;
 
     /**
-     * @param chainSize The size of the binary chain to encode.
-     * @return The minimal version that can encode the binary chain.
+     * @param chainSize    The size of the binary chain to encode.
+     * @param encodingMode The encoding mode to use.
+     * @return The minimal version that can encode the chain.
      */
-    public static Version fromChainSize(int chainSize) {
+    public static Version fromChainSize(int chainSize, EncodingMode encodingMode) {
+        if (EncodingMode.BINARY != encodingMode) {
+            throw new UnsupportedOperationException("Only BINARY encoding mode is supported for now");
+        }
         return Arrays.stream(values())
                 .filter(version -> version.maxBinaryChars >= chainSize)
                 .findFirst()

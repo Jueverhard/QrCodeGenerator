@@ -14,8 +14,11 @@ public class QrCode {
     private final Set<Position> pixels;
 
     public QrCode(String chainToRepresent) {
-        this.version = Version.fromChainSize(chainToRepresent.length());
-        // TODO JEV : defines every black positions according to the QR Code encoding specs
+        // Determines the best encoding mode and the minimal version required
+        EncodingMode encodingMode = EncodingMode.selectBestMode(chainToRepresent);
+        this.version = Version.fromChainSize(chainToRepresent.length(), encodingMode);
+
+        // Generates every format pixels
         this.pixels = this.generateFormatPixels();
     }
 
