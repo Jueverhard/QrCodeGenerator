@@ -1,5 +1,8 @@
 package qrcodegenerator.models;
 
+import java.util.ArrayDeque;
+import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -20,26 +23,15 @@ public class QrCode {
 
         // Generates every format pixels
         this.pixels = this.generateFormatPixels();
-    }
 
-    /**
-     * Prints the QR Code on the standard output.
-     */
-    public void print() {
-        log.info("Required version identified: " + this.version);
-        StringBuilder builder = new StringBuilder("Here's the corresponding QR Code:\n");
-        for (int y = 0; y < this.version.getCodeWidth(); y++) {
-            for (int x = 0; x < this.version.getCodeWidth(); x++) {
-                int finalX = x;
-                int finalY = y;
-                boolean isBlack = this.pixels.stream()
-                        .anyMatch(black -> finalX == black.x() && finalY == black.y());
-                builder.append(isBlack ? '#' : '.');
-            }
-            builder.append("\n");
-        }
+        // Defines every ordered position to fill with data
+        final Queue<Position> positionsToFill = this.prepareEveryPositionsToBeFilled();
 
-        log.info(builder.toString());
+        // Encodes the metadata into pixels
+        // TODO JEV : to implement
+
+        // Encodes the data into pixels
+        // TODO JEV : to implement
     }
 
     /**
@@ -102,5 +94,57 @@ public class QrCode {
         );
 
         return squarePixels;
+    }
+
+    /**
+     * @return Every position to be filled, ordered.
+     */
+    private Queue<Position> prepareEveryPositionsToBeFilled() {
+        Queue<Position> positionsToFill = new ArrayDeque<>();
+        // TODO JEV : implements the generation of every position to be filled with data
+        int upperBound = this.version.getCodeWidth() - 1;
+        positionsToFill.addAll(List.of(
+                new Position(upperBound, upperBound),
+                new Position(upperBound - 1, upperBound),
+                new Position(upperBound, upperBound - 1),
+                new Position(upperBound - 1, upperBound - 1),
+                new Position(upperBound, upperBound - 2),
+                new Position(upperBound - 1, upperBound - 2),
+                new Position(upperBound, upperBound - 3),
+                new Position(upperBound - 1, upperBound - 3),
+                new Position(upperBound, upperBound - 4),
+                new Position(upperBound - 1, upperBound - 4),
+                new Position(upperBound, upperBound - 5),
+                new Position(upperBound - 1, upperBound - 5),
+                new Position(upperBound, upperBound - 6),
+                new Position(upperBound - 1, upperBound - 6),
+                new Position(upperBound, upperBound - 7),
+                new Position(upperBound - 1, upperBound - 7),
+                new Position(upperBound, upperBound - 8),
+                new Position(upperBound - 1, upperBound - 8),
+                new Position(upperBound, upperBound - 9),
+                new Position(upperBound - 1, upperBound - 9)
+        ));
+        return positionsToFill;
+    }
+
+    /**
+     * Prints the QR Code on the standard output.
+     */
+    public void print() {
+        log.info("Required version identified: " + this.version);
+        StringBuilder builder = new StringBuilder("Here's the corresponding QR Code:\n");
+        for (int y = 0; y < this.version.getCodeWidth(); y++) {
+            for (int x = 0; x < this.version.getCodeWidth(); x++) {
+                int finalX = x;
+                int finalY = y;
+                boolean isBlack = this.pixels.stream()
+                        .anyMatch(black -> finalX == black.x() && finalY == black.y());
+                builder.append(isBlack ? '#' : '.');
+            }
+            builder.append("\n");
+        }
+
+        log.info(builder.toString());
     }
 }
