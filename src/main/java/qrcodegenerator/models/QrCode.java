@@ -26,7 +26,7 @@ public class QrCode {
     public void print() {
         log.info("Required version identified: " + this.version);
         StringBuilder builder = new StringBuilder("Here's the corresponding QR Code:\n");
-        for (int y = 0; y < this.version.getCodeWidth(); y++) {
+        for (int y = 0; y <= this.version.getCodeWidth(); y++) {
             for (int x = 0; x <= this.version.getCodeWidth(); x++) {
                 int finalX = x;
                 int finalY = y;
