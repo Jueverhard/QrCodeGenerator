@@ -1,6 +1,7 @@
 package qrcodegenerator.models;
 
 import java.util.ArrayDeque;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
@@ -28,7 +29,7 @@ public class QrCode {
         final Queue<Position> positionsToFill = this.prepareEveryPositionsToBeFilled();
 
         // Encodes the metadata into pixels
-        // TODO JEV : to implement
+        this.pixels.addAll(this.generateMetadataPixels(positionsToFill, encodingMode, chainToRepresent));
 
         // Encodes the data into pixels
         // TODO JEV : to implement
@@ -126,6 +127,47 @@ public class QrCode {
                 new Position(upperBound - 1, upperBound - 9)
         ));
         return positionsToFill;
+    }
+
+    /**
+     * Generates metadata pixels (encoding mode and data length).
+     *
+     * @param positionsToFill Positions to fill.
+     * @param encodingMode    Encoding mode used.
+     * @param data            Data to encode.
+     * @return The set of filled pixels.
+     */
+    private Set<Position> generateMetadataPixels(Queue<Position> positionsToFill, EncodingMode encodingMode, String data) {
+        // Fills encoding mode metadata
+        Set<Position> metadataPixels = new HashSet<>();
+        for (int i = 3; i >= 0; i--) {
+            Position position = positionsToFill.remove();
+            if (i == encodingMode.ordinal()) {
+                metadataPixels.add(position);
+            }
+        }
+
+        // Fills data length metadata
+        byte dataLength = convertToByte(data.length());
+        for (int i = 7; i >= 0; i--) {
+            Position position = positionsToFill.remove();
+            boolean isBitSet = ((dataLength >> i) & 1) == 1;
+            if (isBitSet) {
+                metadataPixels.add(position);
+            }
+        }
+
+        return metadataPixels;
+    }
+
+    /**
+     * Converts an integer value to a byte, keeping only the 8 least significant bits.
+     *
+     * @param value Integer value to convert.
+     * @return The resulting bits as a byte.
+     */
+    private byte convertToByte(int value) {
+        return (byte) (value & 0xFF);
     }
 
     /**
