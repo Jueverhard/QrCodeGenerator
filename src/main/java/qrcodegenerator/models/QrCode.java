@@ -6,7 +6,6 @@ import qrcodegenerator.models.enums.Version;
 
 import java.util.ArrayDeque;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -105,31 +104,15 @@ public class QrCode {
      * @return Every position to be filled, ordered.
      */
     private Queue<Position> prepareEveryPositionsToBeFilled() {
-        Queue<Position> positionsToFill = new ArrayDeque<>();
-        // TODO JEV : implements the generation of every position to be filled with data
         int upperBound = this.version.getCodeWidth() - 1;
-        positionsToFill.addAll(List.of(
-                new Position(upperBound, upperBound),
-                new Position(upperBound - 1, upperBound),
-                new Position(upperBound, upperBound - 1),
-                new Position(upperBound - 1, upperBound - 1),
-                new Position(upperBound, upperBound - 2),
-                new Position(upperBound - 1, upperBound - 2),
-                new Position(upperBound, upperBound - 3),
-                new Position(upperBound - 1, upperBound - 3),
-                new Position(upperBound, upperBound - 4),
-                new Position(upperBound - 1, upperBound - 4),
-                new Position(upperBound, upperBound - 5),
-                new Position(upperBound - 1, upperBound - 5),
-                new Position(upperBound, upperBound - 6),
-                new Position(upperBound - 1, upperBound - 6),
-                new Position(upperBound, upperBound - 7),
-                new Position(upperBound - 1, upperBound - 7),
-                new Position(upperBound, upperBound - 8),
-                new Position(upperBound - 1, upperBound - 8),
-                new Position(upperBound, upperBound - 9),
-                new Position(upperBound - 1, upperBound - 9)
-        ));
+        Queue<Position> positionsToFill = new ArrayDeque<>();
+        GridIterator gridIterator = new GridIterator(upperBound, Direction.LEFT);
+
+        while (gridIterator.hasNext() && positionsToFill.size() < 30) {
+            positionsToFill.add(gridIterator.getCurrentPosition());
+            gridIterator.next();
+        }
+
         return positionsToFill;
     }
 
