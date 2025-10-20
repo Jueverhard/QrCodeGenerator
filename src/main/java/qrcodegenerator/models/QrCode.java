@@ -6,6 +6,7 @@ import qrcodegenerator.models.enums.Version;
 
 import java.util.ArrayDeque;
 import java.util.HashSet;
+import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -35,7 +36,22 @@ public class QrCode {
         this.pixels.addAll(this.generateMetadataPixels(positionsToFill, encodingMode, chainToRepresent));
 
         // Encodes the data into pixels
-        // TODO JEV : to implement
+        byte[] dataBytes = chainToRepresent.getBytes();
+        for (byte dataByte : dataBytes) {
+            for (int i = 7; i >= 0; i--) {
+                try {
+                    Position position = positionsToFill.remove();
+                    boolean isBitSet = ((dataByte >> i) & 1) == 1;
+                    if (isBitSet) {
+                        this.pixels.add(position);
+                    }
+                } catch (NoSuchElementException e) {
+                    // Shouldn't happen due to version selection. However, due to the current grid iteration, it may
+                    log.severe("Not enough space to encode the data in the QR Code!");
+                    return;
+                }
+            }
+        }
     }
 
     /**
