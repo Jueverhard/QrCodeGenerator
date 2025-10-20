@@ -1,4 +1,4 @@
-package qrcodegenerator.models;
+package qrcodegenerator.models.enums;
 
 public enum EncodingMode {
     NUMERIC,

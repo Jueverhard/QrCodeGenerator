@@ -1,4 +1,4 @@
-package qrcodegenerator.models;
+package qrcodegenerator.models.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

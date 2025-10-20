@@ -1,5 +1,9 @@
 package qrcodegenerator.models;
 
+import qrcodegenerator.models.enums.Direction;
+import qrcodegenerator.models.enums.EncodingMode;
+import qrcodegenerator.models.enums.Version;
+
 import java.util.ArrayDeque;
 import java.util.HashSet;
 import java.util.List;
