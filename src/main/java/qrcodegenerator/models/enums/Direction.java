@@ -11,8 +11,7 @@ public enum Direction {
      */
     public Direction getNextDirection(boolean isGoingUp) {
         return switch (this) {
-            case TOP_RIGHT -> LEFT;
-            case BOTTOM_RIGHT -> TOP_RIGHT;
+            case TOP_RIGHT, BOTTOM_RIGHT -> LEFT;
             case LEFT -> isGoingUp ? TOP_RIGHT : BOTTOM_RIGHT;
         };
     }
