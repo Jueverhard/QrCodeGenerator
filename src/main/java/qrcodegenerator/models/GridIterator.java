@@ -107,8 +107,8 @@ public class GridIterator {
         }
 
         if (this.unskippableBoundaries.contains(position)
-                || position.x() < 0 && position.x() > upperBound
-                || position.y() < 0 && position.y() > upperBound
+                || position.x() < 0 || position.x() > upperBound
+                || position.y() < 0 || position.y() > upperBound
         ) {
             return Optional.of(BoundaryType.UNSKIPPABLE);
         }
