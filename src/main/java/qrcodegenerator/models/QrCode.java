@@ -1,6 +1,5 @@
 package qrcodegenerator.models;
 
-import qrcodegenerator.models.enums.Direction;
 import qrcodegenerator.models.enums.EncodingMode;
 import qrcodegenerator.models.enums.Version;
 
@@ -122,11 +121,11 @@ public class QrCode {
     private Queue<Position> prepareEveryPositionsToBeFilled() {
         int upperBound = this.version.getCodeWidth() - 1;
         Queue<Position> positionsToFill = new ArrayDeque<>();
-        GridIterator gridIterator = new GridIterator(upperBound, Direction.LEFT);
+        GridIterator gridIterator = new GridIterator(upperBound);
+        positionsToFill.add(new Position(upperBound, upperBound));
 
         while (gridIterator.hasNext() && positionsToFill.size() < 30) {
-            positionsToFill.add(gridIterator.getCurrentPosition());
-            gridIterator.next();
+            positionsToFill.addAll(gridIterator.nextPositions());
         }
 
         return positionsToFill;

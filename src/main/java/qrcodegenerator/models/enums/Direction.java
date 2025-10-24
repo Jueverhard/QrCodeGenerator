@@ -1,20 +1,19 @@
 package qrcodegenerator.models.enums;
 
-import java.util.List;
-
 public enum Direction {
     TOP_RIGHT,
     BOTTOM_RIGHT,
     LEFT;
 
     /**
-     * @return Directions that may be followed after the evaluated one.
+     * @param isGoingUp Whether the current route is going up.
+     * @return The next direction that should be followed.
      */
-    public List<Direction> getNextDirectionOptions() {
+    public Direction getNextDirection(boolean isGoingUp) {
         return switch (this) {
-            case TOP_RIGHT -> List.of(LEFT);
-            case BOTTOM_RIGHT -> List.of(TOP_RIGHT);
-            case LEFT -> List.of(TOP_RIGHT, LEFT, BOTTOM_RIGHT);
+            case TOP_RIGHT -> LEFT;
+            case BOTTOM_RIGHT -> TOP_RIGHT;
+            case LEFT -> isGoingUp ? TOP_RIGHT : BOTTOM_RIGHT;
         };
     }
 }
