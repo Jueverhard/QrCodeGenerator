@@ -124,7 +124,7 @@ public class QrCode {
         GridIterator gridIterator = new GridIterator(upperBound);
         positionsToFill.add(new Position(upperBound, upperBound));
 
-        while (gridIterator.hasNext() && positionsToFill.size() < 30) {
+        while (gridIterator.hasNext() && positionsToFill.size() < 150) {
             positionsToFill.addAll(gridIterator.nextPositions());
         }
 

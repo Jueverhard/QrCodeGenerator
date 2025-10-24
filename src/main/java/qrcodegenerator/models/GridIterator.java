@@ -92,7 +92,21 @@ public class GridIterator {
 
         // If the met boundary is unskippable, compute positions until it goes back to classic pattern
         List<Position> nextPositions = new ArrayList<>();
-        // TODO JEV : implements the movement logic
+        nextPosition = this.currentPosition.move(Direction.LEFT);
+
+        if (isBoundary(nextPosition).isEmpty()) {
+            // If the position to the left is free, shifts left
+            nextPositions.add(nextPosition.copyOf());
+            nextPosition = nextPosition.move(Direction.LEFT);
+            nextPositions.add(nextPosition.copyOf());
+
+            // Shifts the vertical routing way
+            this.isGoingUp = !this.isGoingUp;
+            this.currentPosition = nextPosition;
+            this.currentDirection = Direction.LEFT.getNextDirection(this.isGoingUp);
+        } else {
+            // TODO JEV : implements the movement logic when reaching a corner
+        }
 
         return nextPositions;
     }
