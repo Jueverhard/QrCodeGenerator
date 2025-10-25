@@ -72,6 +72,7 @@ public class GridIterator {
 
     /**
      * Moves to the next position according to the grid movement logic.
+     * @return The new position, along with potential additional ones joining it from the previous one.
      */
     public List<Position> nextPositions() {
         // Computes the next position and direction
