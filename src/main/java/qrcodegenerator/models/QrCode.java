@@ -187,7 +187,7 @@ public class QrCode {
                 int finalY = y;
                 boolean isBlack = this.pixels.stream()
                         .anyMatch(black -> finalX == black.x() && finalY == black.y());
-                builder.append(isBlack ? '#' : '.');
+                builder.append(isBlack ? "⬛ " : "⬜ ");
             }
             builder.append("\n");
         }
