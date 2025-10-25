@@ -67,7 +67,7 @@ public class GridIterator {
      * @return Whether there is a next position to visit.
      */
     public boolean hasNext() {
-        return !(0 == currentPosition.x() && upperBound - 7 == currentPosition.y());
+        return !(0 == currentPosition.x() && upperBound - 8 == currentPosition.y());
     }
 
     /**
@@ -90,25 +90,39 @@ public class GridIterator {
             return Collections.singletonList(this.currentPosition.copyOf());
         }
 
-        // If the met boundary is unskippable, compute positions until it goes back to classic pattern
-        List<Position> nextPositions = new ArrayList<>();
+        // If the met boundary is unskippable, shifts the vertical routing way and compute positions until it goes back
+        // to the classic pattern
+        this.isGoingUp = !this.isGoingUp;
         nextPosition = this.currentPosition.move(Direction.LEFT);
+        Optional<BoundaryType> leftBoundaryOpt = isBoundary(nextPosition);
 
-        if (isBoundary(nextPosition).isEmpty()) {
-            // If the position to the left is free, shifts left
+        if (BoundaryType.SKIPPABLE == leftBoundaryOpt.orElse(BoundaryType.SKIPPABLE)) {
+            // If the position to the left is skippable, skips it
+            if (leftBoundaryOpt.isPresent()) {
+                nextPosition = nextPosition.move(Direction.LEFT);
+            }
+
+            // Then, shifts to the bi-column to the left
+            List<Position> nextPositions = new ArrayList<>();
             nextPositions.add(nextPosition.copyOf());
             nextPosition = nextPosition.move(Direction.LEFT);
             nextPositions.add(nextPosition.copyOf());
 
-            // Shifts the vertical routing way
-            this.isGoingUp = !this.isGoingUp;
+            // Updates current state
             this.currentPosition = nextPosition;
             this.currentDirection = Direction.LEFT.getNextDirection(this.isGoingUp);
+            return nextPositions;
         } else {
-            // TODO JEV : implements the movement logic when reaching a corner
+            // If the position to the left also is an unskippable boundary, repeats the classic pattern until it isn't
+            nextDirection = Direction.LEFT;
+            while (isBoundary(nextPosition).isPresent()) {
+                nextPosition = nextPosition.move(nextDirection);
+                nextDirection = nextDirection.getNextDirection(this.isGoingUp);
+            }
+            this.currentPosition = nextPosition;
+            this.currentDirection = nextDirection;
+            return Collections.singletonList(this.currentPosition.copyOf());
         }
-
-        return nextPositions;
     }
 
     /**

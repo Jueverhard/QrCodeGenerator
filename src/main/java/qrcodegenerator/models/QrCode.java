@@ -85,6 +85,9 @@ public class QrCode {
         // Generates fixed bottom-left dark pixel
         fixedPixels.add(new Position(8, upperBound - 7));
 
+        // Generates error level indicators
+        // TODO JEV : to be implemented
+
         return fixedPixels;
     }
 
@@ -124,7 +127,7 @@ public class QrCode {
         GridIterator gridIterator = new GridIterator(upperBound);
         positionsToFill.add(new Position(upperBound, upperBound));
 
-        while (gridIterator.hasNext() && positionsToFill.size() < 150) {
+        while (gridIterator.hasNext()) {
             positionsToFill.addAll(gridIterator.nextPositions());
         }
 
